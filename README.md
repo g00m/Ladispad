@@ -51,3 +51,15 @@ Included are the SVG files for the acrylic cases I made for the pad. You can las
 ![](/images/20211129_065114-01.jpeg) 
 ![](/images/20211129_065213-01.jpeg)
 ![](/images/20211129_065248-01.jpeg)
+
+## Customize your keyboard
+
+To customize the keyboard on macOS you need the following steps:
+
+1. Install `qmk` with `brew install qmk/qmk/qmk`
+2. Checkout the `qmk_firmware` repo from https://github.com/qmk/qmk_firmware
+3. Copy the `qmk/ladis` folder into the `keyboards` folder of the repository
+4. (optional) For a new keyboard layout create one with `qmk new-keymap -kb ladis`
+5. Change the behaviour of the keyboard in the `keymap.c` file 
+6. Compile your new keymap with qmk compile -kb ladis -km $KEYMAP
+7. Use `QMK-Toolbox` to flash the new firmware onto your ladispad
