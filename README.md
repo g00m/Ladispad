@@ -63,3 +63,16 @@ To customize the keyboard on macOS you need the following steps:
 5. Change the behaviour of the keyboard in the `keymap.c` file 
 6. Compile your new keymap with qmk compile -kb ladis -km $KEYMAP
 7. Use `QMK-Toolbox` to flash the new firmware onto your ladispad
+
+## Update the layer images
+
+To create your own images for a layer create an image file with 128×32 dimension.
+Upload the file to https://joric.github.io/qle/ and use the `raw data` representation in the `keymap.c` file 
+
+``` c
+static const char PROGMEM raw_logo[] = {
+       $RAW_IMAGE
+};
+```
+
+Now compile and upload the firmware again and the new images should be displayed.
