@@ -3,7 +3,7 @@
     "manufacturer": "Ladis",
     "url": "https://github.com/ajmandourah/Ladispad",
     "maintainer": "ajmandourah",
-    "bootloader": "atmel-dfu",
+    "bootloader": "caterina",
     "processor": "atmega32u4",
     "features": {
         "bootmagic": true,
