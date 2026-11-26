@@ -32,7 +32,7 @@ bool oled_task_user(void) {
     oled_write_P(PSTR("LADISPAD"), false);
     oled_set_cursor(0, 2);
     oled_write_P(PSTR("VIAL LAYER "), false);
-    oled_write_char('0' + get_highest_layer(layer_state), false);
+    oled_write_char('0' + get_highest_layer(layer_state | default_layer_state), false);
     return false;
 }
 
