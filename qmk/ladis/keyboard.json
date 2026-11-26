@@ -1,0 +1,54 @@
+{
+    "keyboard_name": "LadisPad",
+    "manufacturer": "Ladis",
+    "url": "https://github.com/ajmandourah/Ladispad",
+    "maintainer": "ajmandourah",
+    "bootloader": "atmel-dfu",
+    "processor": "atmega32u4",
+    "features": {
+        "bootmagic": true,
+        "mousekey": true,
+        "extrakey": true,
+        "nkro": true,
+        "encoder": true,
+        "oled": true
+    },
+    "matrix_pins": {
+        "direct": [
+            ["D3", "B1", "D4", "C6", "D7", "E6", "B4", "B5", "F4", "F7", "B3"]
+        ]
+    },
+    "encoder": {
+        "rotary": [
+            {"pin_a": "F6", "pin_b": "F5"},
+            {"pin_a": "B2", "pin_b": "B6"}
+        ]
+    },
+    "usb": {
+        "vid": "0xFEED",
+        "pid": "0x6060",
+        "device_version": "0.0.1"
+    },
+    "oled": {
+        "driver": "ssd1306"
+    },
+    "layouts": {
+        "LAYOUT": {
+            "layout": [
+                {"label": "Back",    "x": 0, "y": 0, "matrix": [0, 0]},
+                {"label": "Up",      "x": 1, "y": 0, "matrix": [0, 1]},
+                {"label": "Forward", "x": 2, "y": 0, "matrix": [0, 2]},
+
+                {"label": "Left",    "x": 0, "y": 1, "matrix": [0, 3]},
+                {"label": "Down",    "x": 1, "y": 1, "matrix": [0, 4]},
+                {"label": "Right",   "x": 2, "y": 1, "matrix": [0, 5]},
+                {"label": "Enc 1",   "x": 3.5, "y": 1, "matrix": [0, 9]},
+
+                {"label": "Fn",      "x": 0, "y": 2, "matrix": [0, 6]},
+                {"label": "Refresh", "x": 1, "y": 2, "matrix": [0, 7]},
+                {"label": "F16",     "x": 2, "y": 2, "matrix": [0, 8]},
+                {"label": "Enc 2",   "x": 3.5, "y": 2, "matrix": [0, 10]}
+            ]
+        }
+    }
+}

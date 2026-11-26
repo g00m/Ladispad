@@ -1,0 +1,47 @@
+name: Build Ladispad Vial firmware
+
+on:
+  push:
+    paths:
+      - "qmk/ladis/**"
+      - ".github/workflows/build.yml"
+  pull_request:
+    paths:
+      - "qmk/ladis/**"
+      - ".github/workflows/build.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Ladispad
+        uses: actions/checkout@v4
+
+      - name: Prepare Vial-QMK
+        shell: bash
+        run: |
+          git clone --depth 1 --branch vial https://github.com/vial-kb/vial-qmk.git "$RUNNER_TEMP/vial-qmk"
+          git -C "$RUNNER_TEMP/vial-qmk" submodule update --init --recursive
+          mkdir -p "$RUNNER_TEMP/vial-qmk/keyboards/ladis"
+          rsync -a --delete qmk/ladis/ "$RUNNER_TEMP/vial-qmk/keyboards/ladis/"
+
+      - name: Build firmware
+        shell: bash
+        run: |
+          docker run --rm \
+            -v "$RUNNER_TEMP/vial-qmk:/qmk_firmware" \
+            -w /qmk_firmware \
+            -e QMK_HOME=/qmk_firmware \
+            ghcr.io/qmk/qmk_cli:latest \
+            sh -c "git config --global --add safe.directory '*' && qmk compile -kb ladis -km vial"
+
+      - name: Upload firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: ladis-vial-${{ github.sha }}
+          path: ${{ runner.temp }}/vial-qmk/ladis_vial.hex
+          if-no-files-found: error

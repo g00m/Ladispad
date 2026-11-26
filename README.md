@@ -10,7 +10,7 @@ Ladispad uses a Pro Micro as its main controller. It's very affordable, and ther
 
 ![Ladispad PCB showing promicro compatibility](/images/IMG-20211108-WA0001.jpg) 
 
-The Ladispad is QMK/Via and soon Vial compatible which will add to the ease of use in case you want to program your encoders on the fly without the need to flash the firmware every time you do so.
+Ladispad supports QMK/VIA and includes a Vial keymap for configuring keys, layers, encoder actions, and macros without reflashing.
 
 Included are the SVG files for the acrylic cases I made for the pad. You can laser cut it using the online service provider of your choice.
 
@@ -52,17 +52,22 @@ Included are the SVG files for the acrylic cases I made for the pad. You can las
 ![](/images/20211129_065213-01.jpeg)
 ![](/images/20211129_065248-01.jpeg)
 
-## Customize your keyboard
+## Firmware development and Vial
 
-To customize the keyboard on macOS you need the following steps:
+The keyboard source is in `qmk/ladis`. Set up a local Vial-QMK build environment and compile the Vial keymap with:
 
-1. Install `qmk` with `brew install qmk/qmk/qmk`
-2. Checkout the `qmk_firmware` repo from https://github.com/qmk/qmk_firmware
-3. Copy the `qmk/ladis` folder into the `keyboards` folder of the repository
-4. (optional) For a new keyboard layout create one with `qmk new-keymap -kb ladis`
-5. Change the behaviour of the keyboard in the `keymap.c` file 
-6. Compile your new keymap with qmk compile -kb ladis -km $KEYMAP
-7. Use `QMK-Toolbox` to flash the new firmware onto your ladispad
+```sh
+./scripts/setup.sh
+./scripts/build.sh vial
+```
+
+The build artifact is `build/ladis_vial.hex`. Setup uses a separate `~/Development/vial-qmk` checkout; it does not replace an existing `qmk_firmware` checkout. If AVR GCC is missing, run `./scripts/build_avr_toolchain.sh` once.
+
+To flash, put the pad in bootloader mode and run `./scripts/flash.sh vial`. To enter the ATmega32U4 DFU bootloader, bridge RESET to GND once and release. In Vial, hold the top-middle and top-right keys together to unlock. Create a macro with Tap `O`, Tap `K`, then Tap `Down`, save it, and assign it to the top-left key.
+
+### GitHub Actions
+
+Pushes and pull requests that change `qmk/ladis` automatically build the Vial firmware. Start a build manually from the repository’s **Actions** tab with **Build Ladispad Vial firmware → Run workflow**. Download the `ladis-vial-<commit>` artifact, which contains `ladis_vial.hex`, from the run’s Artifacts section, then flash it locally; Actions cannot access a USB-connected pad.
 
 ## Update the layer images
 
