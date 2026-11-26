@@ -7,10 +7,10 @@
 #   ./scripts/flash.sh via --bootloader caterina
 #   ./scripts/flash.sh via --no-build        # flash the existing build/*.hex
 #
-# Entering the bootloader (no reset button on the Ladispad PCB):
-#   * atmel-dfu  : bridge RESET to GND once, release -> device enters DFU
-#   * caterina   : bridge RESET to GND twice quickly (or reset once while a
-#                  1200-baud port is open) -> "Arduino" bootloader appears
+# Entering the bootloader (Pro Micro with Caterina):
+#   * bridge RST to GND briefly twice, releasing between touches
+#   * the second reset should be within about 750 ms; Caterina then appears
+#     as a temporary /dev/cu.usbmodem* port
 #
 set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/env.sh"
@@ -42,9 +42,9 @@ if [[ "$BOOTLOADER" == "auto" ]]; then
     detected="$(detect_bootloader)"
     case "$detected" in
         unknown)
-            warn "no board detected in bootloader mode - assuming the declared 'atmel-dfu'"
-            warn "put the board in the bootloader first: bridge RESET to GND, then release"
-            BOOTLOADER="atmel-dfu"
+            warn "no board detected in bootloader mode - assuming the declared 'caterina'"
+            warn "put the board in bootloader mode: briefly bridge RST to GND twice"
+            BOOTLOADER="caterina"
             ;;
         *)  log "detected bootloader: $detected"; BOOTLOADER="$detected" ;;
     esac

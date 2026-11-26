@@ -54,20 +54,43 @@ Included are the SVG files for the acrylic cases I made for the pad. You can las
 
 ## Firmware development and Vial
 
-The keyboard source is in `qmk/ladis`. Set up a local Vial-QMK build environment and compile the Vial keymap with:
+The keyboard source is in `qmk/ladis`. This Pro Micro uses the **Caterina** bootloader, set in `qmk/ladis/keyboard.json`. The Vial keymap enables the OLED and displays `LADISPAD` plus the active Vial layer number (`0`–`3`). It disables optional QMK features to leave room for Vial and the display in the ATmega32U4's flash.
+
+### Build locally
+
+Set up a local Vial-QMK environment and build the Vial keymap:
 
 ```sh
 ./scripts/setup.sh
 ./scripts/build.sh vial
 ```
 
-The build artifact is `build/ladis_vial.hex`. Setup uses a separate `~/Development/vial-qmk` checkout; it does not replace an existing `qmk_firmware` checkout. If AVR GCC is missing, run `./scripts/build_avr_toolchain.sh` once.
+The artifact is `build/ladis_vial.hex`. Setup uses a separate `~/Development/vial-qmk` checkout and does not replace an existing `qmk_firmware` checkout. Local compilation requires AVR GCC; if it's missing, run `./scripts/build_avr_toolchain.sh` once. `./scripts/flash.sh vial` builds first, then waits for the bootloader—double-reset the Pro Micro when the flash step is waiting.
 
-To flash, put the pad in bootloader mode and run `./scripts/flash.sh vial`. To enter the ATmega32U4 DFU bootloader, bridge RESET to GND once and release. In Vial, hold the top-middle and top-right keys together to unlock. Create a macro with Tap `O`, Tap `K`, then Tap `Down`, save it, and assign it to the top-left key.
+### Build with GitHub Actions
 
-### GitHub Actions
+Pushes and pull requests that change `qmk/ladis` automatically build Vial firmware. To start a build manually, open the repository's **Actions** tab and select **Build Ladispad Vial firmware → Run workflow**. Download the `ladis-vial-<commit>` artifact from the run; it contains `ladis_vial.hex`. Actions builds the firmware but cannot flash a USB-connected pad.
 
-Pushes and pull requests that change `qmk/ladis` automatically build the Vial firmware. Start a build manually from the repository’s **Actions** tab with **Build Ladispad Vial firmware → Run workflow**. Download the `ladis-vial-<commit>` artifact, which contains `ladis_vial.hex`, from the run’s Artifacts section, then flash it locally; Actions cannot access a USB-connected pad.
+### Flash a downloaded artifact
+
+On macOS, start this command with the downloaded HEX path, then double-reset the Pro Micro. The command waits for Caterina's temporary `/dev/cu.usbmodem*` port and flashes as soon as it appears:
+
+```sh
+HEX="$HOME/Downloads/ladis_vial.hex" # set this to the downloaded file
+while :; do
+  PORT=""
+  for candidate in /dev/cu.usbmodem*; do
+    [[ -e "$candidate" ]] && { PORT="$candidate"; break; }
+  done
+  [[ -n "$PORT" ]] && break
+  sleep 0.1
+done
+avrdude -p atmega32u4 -c avr109 -P "$PORT" -b 57600 -U "flash:w:${HEX}:i"
+```
+
+With USB connected, briefly bridge the Pro Micro's **RST** and **GND** pins twice, releasing between touches; make the second touch within about 750 ms. Caterina stays available for only a few seconds, so don't hold the bridge. A successful flash reports that the bytes were written and verified, then the pad re-enumerates as `LadisPad`. QMK Toolbox is another option for flashing the HEX.
+
+Open [Vial](https://get.vial.today/) and connect the pad. Hold the top-middle and top-right keys together to unlock it. To test a macro, create one with Tap `O`, Tap `K`, then Tap `Down`, and assign it to the top-left key. Vial changes are saved on the device, so remapping does not require reflashing.
 
 ## Update the layer images
 
