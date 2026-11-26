@@ -2,10 +2,10 @@
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(
-        KC_NO, KC_NO, KC_NO,
-        KC_NO, KC_NO, KC_NO,
-        KC_NO, KC_NO, KC_NO,
-        KC_NO, KC_NO
+        KC_F13, KC_F14, KC_F15,
+        KC_F16, KC_F17, KC_F18,
+        KC_LCTL, KC_F19, KC_F20,
+        KC_HOME, KC_MUTE
     ),
     [1] = LAYOUT(
         KC_TRNS, KC_TRNS, KC_TRNS,
@@ -34,11 +34,9 @@ bool oled_task_user(void) {
     return false;
 }
 
-#if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
-    [0] = { ENCODER_CCW_CW(KC_NO, KC_NO), ENCODER_CCW_CW(KC_NO, KC_NO) },
+    [0] = { ENCODER_CCW_CW(KC_MS_WH_DOWN, KC_MS_WH_UP), ENCODER_CCW_CW(KC_VOLD, KC_VOLU) },
     [1] = { ENCODER_CCW_CW(KC_TRNS, KC_TRNS), ENCODER_CCW_CW(KC_TRNS, KC_TRNS) },
     [2] = { ENCODER_CCW_CW(KC_TRNS, KC_TRNS), ENCODER_CCW_CW(KC_TRNS, KC_TRNS) },
     [3] = { ENCODER_CCW_CW(KC_TRNS, KC_TRNS), ENCODER_CCW_CW(KC_TRNS, KC_TRNS) },
 };
-#endif
