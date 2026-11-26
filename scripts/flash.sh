@@ -59,5 +59,5 @@ fi
 require_avr_toolchain
 cd "$QMK_FIRMWARE"
 log "flashing ladis:$KEYMAP (bootloader: $BOOTLOADER)"
-make "ladis:${KEYMAP}:flash" PYTHON="$(qmk_python)" BOOTLOADER="$BOOTLOADER"
+make "ladis:${KEYMAP}:flash" PYTHON="$(qmk_python)" BOOTLOADER="$BOOTLOADER" AVRDUDE_PROGRAMMER="avrdude -D"
 log "flash complete - the pad should re-enumerate as a keyboard"
