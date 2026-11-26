@@ -90,7 +90,7 @@ avrdude -p atmega32u4 -c avr109 -P "$PORT" -b 57600 -U "flash:w:${HEX}:i"
 
 With USB connected, briefly bridge the Pro Micro's **RST** and **GND** pins twice, releasing between touches; make the second touch within about 750 ms. Caterina stays available for only a few seconds, so don't hold the bridge. A successful flash reports that the bytes were written and verified, then the pad re-enumerates as `LadisPad`. QMK Toolbox is another option for flashing the HEX.
 
-Open [Vial](https://get.vial.today/) and connect the pad. Hold the top-middle and top-right keys together to unlock it. To test a macro, create one with Tap `O`, Tap `K`, then Tap `Down`, and assign it to the top-left key. Vial changes are saved on the device, so remapping does not require reflashing.
+Open [Vial](https://get.vial.today/) and connect the pad. Hold the top-middle and top-right keys together to unlock it. The OLED shows the active Vial layer (`0`–`3`); assign `MO(1)` to a spare key and hold it to test layer 1. To test a macro, create one with Tap `O`, Tap `K`, then Tap `Down`, and assign it to the top-left key. Vial changes are saved on the device, so remapping does not require reflashing.
 
 ## Update the layer images
 
